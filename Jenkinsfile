@@ -13,9 +13,9 @@ pipeline {
     stage('Initialize') {
       steps {
         sh "aws --version"
-		sh "/bin/bash echo $AWS_CREDENTIALS"
-		sh "/bin/bash echo $AWS_ACCESS_KEY_ID"
-		sh "/bin/bash echo $AWS_SECRET_ACCESS_KEY"
+		sh "echo $AWS_CREDENTIALS"
+		sh "echo $AWS_ACCESS_KEY_ID"
+		sh "echo $AWS_SECRET_ACCESS_KEY"
         sh "aws iam get-user"
         sh "echo \"Jenkins Workspace: ${env.WORKSPACE}\""
         sh "echo \"Jenkins Build ID: ${env.BUILD_ID}\""
@@ -23,7 +23,7 @@ pipeline {
     }
     stage('Setup Infra') {
       steps {      
-		sh "/bin/bash aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query \"Stacks[0].Outputs[?OutputKey=='PublicIp'].OutputValue\" --output text" 
+		sh "aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query \"Stacks[0].Outputs[?OutputKey=='PublicIp'].OutputValue\" --output text" 
         }
       }
     }
