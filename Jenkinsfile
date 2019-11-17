@@ -21,6 +21,12 @@ pipeline {
     stage('Setup Infra') {
       steps {      
 		sh "aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query \"Stacks[0].Outputs[?OutputKey=='PublicIp'].OutputValue\" --output text  --region eu-central-1" 
+		sh '''
+
+            export PUBLIC_IP=`aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query "Stacks[0].Outputs[?OutputKey=='PublicIp'].OutputValue" --output text  --region eu-central-1`
+			echo $PUBLIC_IP
+
+        '''
         }
       }
     }
