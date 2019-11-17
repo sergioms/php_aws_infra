@@ -3,7 +3,7 @@ Setup PHP server in AWS
 
 List of tasks:
 * setup basic infra and instance (create basic AWS Cloud Formation template)- OK
-* setup httpd and php on instance - OK
+* setup httpd and php on instance - OK (could be replaced with AWS::AutoScaling::LaunchConfiguration)
 * setup Jenkinsfile (CICD pipeline) to deploy workload from github repo using Jenkins - OK
 * setup Jenkinsfile (CICD pipeline) to deploy infra from github repo (AWS CloudFormation template) 
 * Add LB and WAF, block XSS in WAF, setup up logging
