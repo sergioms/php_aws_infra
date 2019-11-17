@@ -6,6 +6,7 @@ List of tasks:
 * setup httpd and php on instance - OK (could be replaced with AWS::AutoScaling::LaunchConfiguration)
 * setup Jenkinsfile (CICD pipeline) to deploy workload from github repo using Jenkins - OK
 * setup Jenkinsfile (CICD pipeline) to deploy infra from github repo (AWS CloudFormation template) 
+* create Subnets, VPC and Auto Scaling Group
 * Add LB and WAF, block XSS in WAF, setup up logging
 * Setup monitoring for request containing XSS payloads
 
