@@ -20,14 +20,17 @@ pipeline {
     }
     stage('Setup Infra') {
       steps {      
-		sh "aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query \"Stacks[0].Outputs[?OutputKey=='PublicIp'].OutputValue\" --output text  --region eu-central-1" 
-		sh '''
+			withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'ssh_aws_php_instance', \
+                                             keyFileVariable: 'SSH_KEY_SERVER')]){
+				sh '''
 
-            export PUBLIC_IP=`aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query "Stacks[0].Outputs[?OutputKey=='PublicIp'].OutputValue" --output text  --region eu-central-1`
-			echo $PUBLIC_IP
+				export PUBLIC_IP=`aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query "Stacks[0].Outputs[?OutputKey=='PublicIp'].OutputValue" --output text  --region eu-central-1`
+				echo $PUBLIC_IP
+				scp -i $SSH_KEY_SERVER src/* ubuntu@$PUBLIC_IP:/var/www/html
 
-        '''
-        }
+				'''
+			}
       }
     }
+  }
 }
