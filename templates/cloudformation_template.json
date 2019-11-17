@@ -56,22 +56,13 @@
          "InstanceType"   : { "Ref" : "InstanceType" },
          "SecurityGroups" : [ {"Ref" : "WebServerSecurityGroup"} ],
          "Tenancy": "default",
-         "KeyName"        : { "Ref" : "KeyName" }
-#        "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
-#             "#!/bin/bash -xe\n",
-#             "yum update -y aws-cfn-bootstrap\n",
-#              "# Install the files and packages from the metadata\n",
-#             "/opt/aws/bin/cfn-init -v ",
-#             "         --stack ", { "Ref" : "AWS::StackName" },
-#             "         --resource WebServerInstance ",
-#             "         --configsets InstallAndRun ",
-#             "         --region ", { "Ref" : "AWS::Region" }, "\n",
-#			  "# Signal the status from cfn-init\n",
-#             "/opt/aws/bin/cfn-signal -e $? ",
-#             "         --stack ", { "Ref" : "AWS::StackName" },
-#             "         --resource WebServerInstance ",
-#             "         --region ", { "Ref" : "AWS::Region" }, "\n"
-#        ]]}}        
+         "KeyName"        : { "Ref" : "KeyName" },
+         "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
+              "#!/bin/bash -xe\n",
+              "sudo apt-get update\n",
+              "sudo apt-get install -y apache2\n",
+              "sudo apt-get install -y php libapache2-mod-php\n"
+         ]]}}        
        }
     },
     
@@ -87,10 +78,14 @@
     }          
   },
   
-#  "Outputs" : {
-#    "WebsiteURL" : {
-#      "Description" : "URL for newly created LAMP stack",
-#      "Value" : { "Fn::Join" : ["", ["http://", { "Fn::GetAtt" : [ "WebServerInstance", "PublicDnsName" ]}]] }
-#    }
-#  }
+  "Outputs" : {
+    "WebsiteURL" : {
+      "Description" : "URL for newly created PHP server",
+      "Value" : { "Fn::Join" : ["", ["http://", { "Fn::GetAtt" : [ "WebServerInstance", "PublicDnsName" ]}]] }
+    },
+    "PublicIp" : {
+      "Value" : { "Fn::GetAtt" : [ "WebServerInstance", "PublicIp" ]},
+      "Description" : "Server's public ip Address"
+    }
+  }
 }
