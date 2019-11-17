@@ -19,20 +19,11 @@ pipeline {
       }
     }
     stage('Setup Infra') {
-      steps {
-        script {
-          try {
-			sh "/bin/bash echo $AWS_CREDENTIALS"
-			sh "/bin/bash echo $AWS_ACCESS_KEY_ID"
-			sh "/bin/bash echo $AWS_SECRET_ACCESS_KEY"
-			sh "/bin/bash aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query \"Stacks[0].Outputs[?OutputKey=='PublicIp'].OutputValue\" --output text" 
-
-          }
-          catch(Exception e) {
-            currentBuild.currentResult = "FAILURE"
-          }
-          finally {
-          }
+      steps {      
+		sh "/bin/bash echo $AWS_CREDENTIALS"
+		sh "/bin/bash echo $AWS_ACCESS_KEY_ID"
+		sh "/bin/bash echo $AWS_SECRET_ACCESS_KEY"
+		sh "/bin/bash aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query \"Stacks[0].Outputs[?OutputKey=='PublicIp'].OutputValue\" --output text" 
         }
       }
     }
