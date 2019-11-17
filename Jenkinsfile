@@ -27,8 +27,8 @@ pipeline {
 
 				export PUBLIC_IP=`aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query "Stacks[0].Outputs[?OutputKey=='PublicIp'].OutputValue" --output text  --region eu-central-1`
 				echo $PUBLIC_IP
-				echo $SSH_KEY_SERVER
-				scp -i $SSH_KEY_SERVER src/* ubuntu@$PUBLIC_IP:/var/www/html
+				echo $SSH_KEY_SERVER > ./pk.pem
+				scp -i ./pk.pem src/* ubuntu@$PUBLIC_IP:/var/www/html
 				'''
 			}
       }
