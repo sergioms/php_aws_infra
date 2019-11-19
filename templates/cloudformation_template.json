@@ -79,6 +79,7 @@
     "Type" : "AWS::CloudFront::Distribution",
     "Properties" : {
         "DistributionConfig" : {
+            "WebACLId": { "Fn::GetAtt" : [ "Waf", "Outputs.WAFWebACL" ]},
             "Origins" : [ {
                  "DomainName" : { "Fn::Join" : ["", [{ "Fn::GetAtt" : [ "WebServerInstance", "PublicIp" ] }, ".xip.io"] ] },
                 "Id" : "myCustomOrigin",
@@ -89,7 +90,7 @@
                 }
             } ],
             "Enabled" : "true",
-            "Comment" : "Domain not registered, try manipulating /etc/host in your own machine",
+            "Comment" : "Domain not registered, just using .xip.io",
             "DefaultRootObject" : "index.html",
             "DefaultCacheBehavior" : {
                 "TargetOriginId" : "myCustomOrigin",
@@ -108,6 +109,21 @@
             } ],
             "PriceClass" : "PriceClass_200",
             "ViewerCertificate": { "CloudFrontDefaultCertificate" : "true" }
+        }
+    }
+  },
+  "Waf" : {
+    "Type" : "AWS::CloudFormation::Stack",
+#    "DependsOn" : [ Buckets ]
+    "Properties" : {
+       "TemplateURL": "https://lamba-waf-php-infra-eu-central-1.s3.eu-central-1.amazonaws.com/aws-waf-security-automations/v2.3.0/aws-waf-security-automations.template",
+       "Parameters": {
+          "ActivateSqlInjectionProtectionParam": "yes",
+          "ActivateCrossSiteScriptingProtectionParam": "yes",
+          "ActivateHttpFloodProtectionParam": "no",
+          "ActivateScannersProbesProtectionParam": "no",
+          "ActivateReputationListsProtectionParam": "no",
+          "ActivateBadBotProtectionParam": "no"
         }
     }
   }
