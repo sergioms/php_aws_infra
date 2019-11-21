@@ -24,8 +24,11 @@ pipeline {
 			withCredentials(bindings: [sshUserPrivateKey(credentialsId: 'ssh_aws_php_instance', \
                                              keyFileVariable: 'SSH_KEY_SERVER')]){
 				sh '''
+				aws cloudformation deploy --stack-name PHP-AWS-Infra --template-file ./templates/cloudformation_template_lb.json --capabilities CAPABILITY_IAM
 				export PUBLIC_IP=`aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query "Stacks[0].Outputs[?OutputKey=='PublicIp'].OutputValue" --output text  --region eu-central-1`
 				scp -i ${SSH_KEY_SERVER} src/* ubuntu@${PUBLIC_IP}:/var/www/html
+				export PUBLIC_IP2=`aws cloudformation describe-stacks  --stack-name PHP-AWS-Infra  --query "Stacks[0].Outputs[?OutputKey=='PublicIp2'].OutputValue" --output text  --region eu-central-1`
+				scp -i ${SSH_KEY_SERVER} src/* ubuntu@${PUBLIC_IP2}:/var/www/html
 				'''
 			}
       }
